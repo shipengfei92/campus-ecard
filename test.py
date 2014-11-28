@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import cx_Oracle
 import hashlib
+import sys
+
+print sys.getdefaultencoding()
 
 db_user = "wanghaiyang"
 db_passwd = "wanghaiyang"
-db_host = "localhost"
+db_host = "202.120.32.27"
 db_port = "1521"
 db_sid = "ecard"
 db_name = db_host + ":" + db_port + "/" + db_sid
@@ -25,6 +28,3 @@ for line in lines:
 	print
 cursor.close()
 db.close()
-
-# s = "你好"
-# print unicode(s,"utf-8")
