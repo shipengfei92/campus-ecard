@@ -3,8 +3,6 @@ import cx_Oracle
 import hashlib
 import sys
 
-print sys.getdefaultencoding()
-
 db_user = "wanghaiyang"
 db_passwd = "wanghaiyang"
 db_host = "202.120.32.27"
@@ -24,6 +22,8 @@ for line in lines:
 			attr_anonym = hashlib.md5(attr).hexdigest()
 			print attr_anonym,
 		else:
+			if attr!=None:
+				attr = attr.decode("gbk")
 			print attr,
 	print
 cursor.close()
