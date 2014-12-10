@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import moduals.read_from_oracle as m_read
+import moduals.read_modual as m_read
 
 db_user = "wanghaiyang"
 db_passwd = "wanghaiyang"
