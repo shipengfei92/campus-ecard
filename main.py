@@ -1,14 +1,31 @@
 # -*- coding: utf-8 -*-
+from moduals.read_modual import *
+from moduals.write_modual import *
 
-import moduals.read_modual as m_read
+#read form database
+print 'Oracle:'
+#read_oracle(oracle_db_user,oracle_db_passwd,oracle_db_host,oracle_db_port,oracle_db_sid)
+print 'MySQL:'
+read_mysql(mysql_db_user,mysql_db_passwd,mysql_db_host,mysql_db_port,mysql_db_sid)
 
-db_user = "wanghaiyang"
-db_passwd = "wanghaiyang"
-db_host = "202.120.32.27"
-db_port = "1521"
-db_sid = "ecard"
+#write to ckan
+print 'ckan_package_create:'
+dataset_dict = {
+	    'name': 'why_test',
+	    'notes': 'A long description of my dataset',
+}
+ckan_package_create(ckan_host,ckan_api_key,dataset_dict)
+print 'ckan_package_delete:'
+dataset_dict = {
+    'id': 'why_test',
+}
+ckan_package_delete(ckan_host,ckan_api_key,dataset_dict)
+print 'ckan_rsource_create:'
+dataset_dict = {
+    'package_id':'why_test',
+    'name':'ckantest',
+    'format':'CSV',
+    'upload':'/Users/wanghaiyang/workspace/ckantest.csv',
+}
+ckan_resource_create(ckan_host,ckan_api_key,dataset_dict)
 
-print "Oracle:"
-m_read.read_oracle(db_user,db_passwd,db_host,db_port,db_sid)
-print "MySQL:"
-m_read.read_mysql('wanghaiyang','wanghaiyang','10.50.15.191','3306','omnilab_bd')

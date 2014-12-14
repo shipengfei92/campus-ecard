@@ -32,7 +32,7 @@ def read_oracle(db_user,db_passwd,db_host,db_port,db_sid):
 def read_mysql(db_user,db_passwd,db_host,db_port,db_sid):
 	conn = mysql.connector.connect(user=db_user,password=db_passwd,host=db_host,port=db_port,database=db_sid)
 	cursor = conn.cursor()
-	cursor.execute('select * from event_attributes limit 20')
+	cursor.execute('select * from w_user_info_distinct limit 20')
 	lines = cursor.fetchall()
 	for line in lines:
 		for attr in line:
