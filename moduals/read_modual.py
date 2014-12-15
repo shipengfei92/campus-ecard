@@ -5,15 +5,15 @@ import mysql.connector
 import moduals.anonymous as m_anonym
 import moduals.data_preprocessing as m_datapre
 
-def read_oracle(db_user,db_passwd,db_host,db_port,db_sid):
+def read_oracle(db_user,db_passwd,db_host,db_port,db_sid,oracle_sql):
 	db_name = db_host + ":" + db_port + "/" + db_sid
 	db = cx_Oracle.connect(db_user,db_passwd,db_name)
 	cursor = db.cursor()
-	sql = "select * from weibo where rownum<=20"
-	cursor.execute(sql)
-	lines = cursor.fetchall()
-	for line in lines:
+	cursor.execute(oracle_sql)
+	print cursor.description
+	for line in cursor:
 		for attr in line:
+			#do some operations here
 			if attr==line[0]:
 				print attr,
 				attr = m_datapre.deal_id(attr)
@@ -29,12 +29,13 @@ def read_oracle(db_user,db_passwd,db_host,db_port,db_sid):
 	cursor.close()
 	db.close()
 
-def read_mysql(db_user,db_passwd,db_host,db_port,db_sid):
+def read_mysql(db_user,db_passwd,db_host,db_port,db_sid,mysql_sql):
 	conn = mysql.connector.connect(user=db_user,password=db_passwd,host=db_host,port=db_port,database=db_sid)
 	cursor = conn.cursor()
-	cursor.execute('select * from w_user_info_distinct limit 20')
-	lines = cursor.fetchall()
-	for line in lines:
+	cursor.execute(mysql_sql)
+	print cursor.description
+	print cursor.column_names
+	for line in cursor:
 		for attr in line:
 			print attr,
 		print
