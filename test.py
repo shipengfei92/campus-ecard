@@ -2,11 +2,11 @@
 import requests
 
 #ckan api information
-dataset_dict = {
-	    'name': 'why_test',
-	    'notes': 'A long description of my dataset',
-}
 
-print dataset_dict.has_key('name')
-print dataset_dict.has_key('name1')
+#根据fields，添加记录
+import chardet
+import urllib
 
+rawdata = urllib.urlopen('http://www.google.cn/').read().decode('utf-8').encode('gbk')
+rawdata = 'ha'.encode('gbk')
+print chardet.detect(rawdata)

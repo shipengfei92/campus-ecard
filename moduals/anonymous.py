@@ -3,7 +3,7 @@
 
 from Crypto.Cipher import AES
 
-key = "wedpspkfij198@*9oksplakihsnxij%#"
+pass_key = "wedpspkfij198@*9oksplakihsnxij%#"
 
 def aes_encrypt(key,message):
 	obj = AES.new(key, AES.MODE_ECB)

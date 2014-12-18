@@ -19,17 +19,20 @@ def ckan_common(func_type,host,api_key,dataset_dict):
 
 	# package_create returns the created package as its result.
 	response_result = response_dict['result']
-	pprint.pprint(response_result)
+	#pprint.pprint(response_result)
+	#print response_result
+	return response_result
 
+#ckan package
 def ckan_package_create(host,api_key,dataset_dict):
 	data_string = urllib.quote(json.dumps(dataset_dict))
 	ckan_common('package_create',host,api_key,data_string)
-
 
 def ckan_package_delete(host,api_key,dataset_dict):
 	data_string = urllib.quote(json.dumps(dataset_dict))
 	ckan_common('package_delete',host,api_key,data_string)
 
+#ckan resource
 def ckan_resource_create(host,api_key,dataset_dict):
 	if dataset_dict.has_key('upload'):
 		url = 'http://' + host + '/api/3/action/resource_create'
@@ -50,6 +53,7 @@ def ckan_resource_update(host,api_key,dataset_dict):
 		data_string = urllib.quote(json.dumps(dataset_dict))
 		ckan_common('resource_update',host,api_key,data_string)
 
+#ckan datastore
 def ckan_datastore_create(host,api_key,dataset_dict):
 	data_string = urllib.quote(json.dumps(dataset_dict))
 	ckan_common('datastore_create',host,api_key,data_string)
@@ -57,6 +61,18 @@ def ckan_datastore_create(host,api_key,dataset_dict):
 def ckan_datastore_upsert(host,api_key,dataset_dict):
 	data_string = urllib.quote(json.dumps(dataset_dict))
 	ckan_common('datastore_upsert',host,api_key,data_string)
+
+def ckan_datastore_search(host,api_key,dataset_dict):
+	data_string = urllib.quote(json.dumps(dataset_dict))
+	return ckan_common('datastore_search',host,api_key,data_string)
+
+def ckan_datastore_delete(host,api_key,dataset_dict):
+	data_string = urllib.quote(json.dumps(dataset_dict))
+	return ckan_common('datastore_delete',host,api_key,data_string)
+
+#my own methods
+def ckan_datastore_get_fields(host,api_key,dataset_dict):
+	return ckan_datastore_search(host,api_key,dataset_dict)['fields']
 
 	
 
