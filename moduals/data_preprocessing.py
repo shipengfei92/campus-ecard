@@ -22,3 +22,21 @@ def record_to_insert_to_ckan(ckan_fields,database_record):
 		else:
 			record[ckan_fields[i]['id']] = str(database_record[i-1])
 	return record
+
+def schema_insert_to_ckan(database_schema):
+	schema = []
+	for i in range(0,len(database_schema)):
+		column = {}
+		if isinstance(database_schema[i][0],str):
+			if chardet.detect(database_schema[i][0])['encoding']!='utf-8':
+				column['id'] = database_schema[i][0].decode('gbk').encode('utf-8')
+			else:
+				column['id'] = database_schema[i][0]
+		elif isinstance(database_schema[i][0],unicode):
+			column['id'] = database_schema[i][0].encode('utf-8')
+		column['type'] = 'text'
+		schema.append(column)
+	return schema
+
+		
+	

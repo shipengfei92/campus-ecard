@@ -53,6 +53,10 @@ def ckan_resource_update(host,api_key,dataset_dict):
 		data_string = urllib.quote(json.dumps(dataset_dict))
 		ckan_common('resource_update',host,api_key,data_string)
 
+def ckan_resource_show(host,api_key,dataset_dict):
+	data_string = urllib.quote(json.dumps(dataset_dict))
+	return ckan_common('resource_show',host,api_key,data_string)
+
 #ckan datastore
 def ckan_datastore_create(host,api_key,dataset_dict):
 	data_string = urllib.quote(json.dumps(dataset_dict))

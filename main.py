@@ -1,43 +1,56 @@
 # -*- coding: utf-8 -*-
 import time
 from moduals.database_methods import *
+from conf.db_conf import *
+from conf.ckan_conf import *
+
+#database info
+db_type = conf_db_type
+db_user = conf_db_user
+db_passwd = conf_db_passwd
+db_host = conf_db_host
+db_port = conf_db_port
+db_sid = conf_db_sid
+sql = conf_sql
+
+#ckan info
+ckan_host = conf_ckan_host
+ckan_api_key = conf_ckan_api_key
+ckan_resource_id = conf_ckan_resource_id
+ckan_push_method = conf_ckan_push_method
+ckan_datastore_rewrite = conf_ckan_datastore_rewrite
 
 
-#oracle connection information
-oracle_db_user = 'wanghaiyang'
-oracle_db_passwd = 'wanghaiyang'
-oracle_db_host = '202.120.32.27'
-oracle_db_port = '1521'
-oracle_db_sid = 'ecard'
-oracle_sql = 'select url_crc,location,province,gender,birthday from weibo where rownum<=100'
+#delete old datastore
+if ckan_datastore_rewrite:
+	print ckan_resource_show(ckan_host,ckan_api_key,{'id': ckan_resource_id})['datastore_active']
+	if ckan_resource_show(ckan_host,ckan_api_key,{'id': ckan_resource_id})['datastore_active']:
+		print 'deleting old datastore'
+		ckan_datastore_delete(ckan_host,ckan_api_key,{'resource_id': ckan_resource_id,"force": True})
+	else:
+		print 'datastore is null'
 
-#mysql connection information
-mysql_db_user = 'wanghaiyang'
-mysql_db_passwd = 'wanghaiyang'
-mysql_db_host = '10.50.15.191'
-mysql_db_port = '3306'
-mysql_db_sid = 'omnilab_bd'
-mysql_sql = 'select url_crc,location,province,gender,birthday from w_user_info_distinct limit 20'
-# mysql_sql = 'desc w_user_info_distinct'
+#update datastore's url
+ckan_datastore_url = 'http://' + ckan_host + '/datastore/dump/' + ckan_resource_id
+if ckan_datastore_url != ckan_resource_show(ckan_host,ckan_api_key,{'id': ckan_resource_id})['url']:
+	ckan_resource_update(ckan_host,ckan_api_key,{'resource_id': ckan_resource_id,'url':ckan_datastore_url,"force": True})
 
-#ckan api information
-ckan_host = '10.50.6.151'
-ckan_api_key = 'c4ec2786-f178-468b-8122-8c24f4175c4d'
-resource_id = '8d28376a-70a3-4995-8278-8b25de32f3cf'
-push_method = 'upsert'
-
-#read form database and write to ckan
-print 'Oracle:'
+#write to database
 s_time = time.time()
-read_oracle(oracle_db_user,oracle_db_passwd,oracle_db_host,oracle_db_port,oracle_db_sid,oracle_sql,ckan_host,ckan_api_key,resource_id,push_method)
+if db_type == 'oracle':
+	print 'creating datastore schema'
+	ckan_schema_oracle(db_user,db_passwd,db_host,db_port,db_sid,sql,ckan_host,ckan_api_key,ckan_resource_id,ckan_push_method)
+	print 'read from ' + db_type + ',writing to ckan,please wait……'
+	read_oracle(db_user,db_passwd,db_host,db_port,db_sid,sql,ckan_host,ckan_api_key,ckan_resource_id,ckan_push_method)
+elif db_type == 'mysql':
+	print 'creating datastore schema'
+	ckan_schema_mysql(db_user,db_passwd,db_host,db_port,db_sid,sql,ckan_host,ckan_api_key,ckan_resource_id,ckan_push_method)
+	print 'read from ' + db_type + ',writing to ckan,please wait……'
+	read_mysql(db_user,db_passwd,db_host,db_port,db_sid,sql,ckan_host,ckan_api_key,ckan_resource_id,ckan_push_method)
+else:
+	print 'other database is developing'
 e_time = time.time()
-print '所用时间:',
-print e_time-s_time
-print 'MySQL:'
-s_time = time.time()
-read_mysql(mysql_db_user,mysql_db_passwd,mysql_db_host,mysql_db_port,mysql_db_sid,mysql_sql,ckan_host,ckan_api_key,resource_id,push_method)
-e_time = time.time()
-print '所用时间:',
+print 'used time:',
 print e_time-s_time
 
 
